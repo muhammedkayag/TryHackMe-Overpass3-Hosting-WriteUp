@@ -143,7 +143,7 @@
         </div>
         <div class="photo-container">
             <img src="pics/o6.png" alt="Image 6">
-            <p>Wee see we are in as user apache. After that we login as user paradox. For to get some information about the system we upload linpeas.sh to the system yo can find it in here: <a href="https://github.com/peass-ng/PEASS-ng/releases/download/20240421-825f642d/linpeas.sh">https://github.com/peass-ng/PEASS-ng/releases/download/20240421-825f642d/linpeas.sh</a> . To upload this script fisrt we start a simple http server in our attackbox with this command:</p>
+            <p>Wee see we are in as user apache. After that we login as user paradox. For to get some information about the system we upload linpeas.sh to the system you can find it in here: <a href="https://github.com/peass-ng/PEASS-ng/releases/download/20240421-825f642d/linpeas.sh">https://github.com/peass-ng/PEASS-ng/releases/download/20240421-825f642d/linpeas.sh</a> . To upload this script first we start a simple http server in our attackbox with this command:</p>
             <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>python3 -m http.server 7000</code></pre></div>
             <p>after that in target we use these commands:</p>
             <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>cd /dev/shm</code></pre></div>
@@ -153,7 +153,7 @@
         </div>
         <div class="photo-container">
             <img src="pics/o7.png" alt="Image 7">
-            <p>So linpeas says there is a nfs share. After some research i found out that we need a private ssh key and nfs share is only accessible locally. First we generate a ssh key then paste it to /home/paradox/authorized_keys </p>
+            <p>So linpeas says there is a nfs share. After some research i found out that we need a private ssh key and nfs share is only accessible locally. First we generate a ssh key then paste it to /home/paradox/.ssh/authorized_keys </p>
         </div>
         <div class="photo-container">
             <img src="pics/o8.png" alt="Image 8">
@@ -173,7 +173,7 @@
             <img src="pics/o10.png" alt="Image 10">
             <p>for to find our first flag we use this command:</p>
             <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>find / -type f -name "*flag*" -exec ls -l {} + 2>/dev/null</code></pre></div>
-            <p>to be root we use nfs misconfiguration. first in target we use this command:</p>
+            <p>to be root we use nfs missconfiguration. first in target we use this command:</p>
             <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>cp /usr/bin/bash /home/james</code></pre></div>
             <p>after that in our attackbox we go to mounted directory and use these commands: </p>
             <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>chown root:root bash</code></pre></div>
