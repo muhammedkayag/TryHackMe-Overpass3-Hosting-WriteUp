@@ -139,7 +139,7 @@
             <p>when we visit /shell1.php in browser we have a reverse shell:</p>
         </div>
         <div class="photo-container">
-            <img src="pics/05.png" alt="Image 5">
+            <img src="pics/o5.png" alt="Image 5">
         </div>
         <div class="photo-container">
             <img src="pics/o6.png" alt="Image 6">
@@ -153,7 +153,7 @@
         </div>
         <div class="photo-container">
             <img src="pics/o7.png" alt="Image 7">
-            <p>So linpeas says there is a nfs export file. After some research i found out that we need a private ssh key and nfs file is only accessible locally. First we generate a ssh key then paste it to /home/paradox/authorized_keys </p>
+            <p>So linpeas says there is a nfs share. After some research i found out that we need a private ssh key and nfs share is only accessible locally. First we generate a ssh key then paste it to /home/paradox/authorized_keys </p>
         </div>
         <div class="photo-container">
             <img src="pics/o8.png" alt="Image 8">
@@ -163,10 +163,10 @@
             <p>after that we mount the share with these commands:</p>
             <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>mkdir nfs</code></pre></div>
             <div class="code-block"><button onclick="navigator.clipboard.writeText(this.nextElementSibling.innerText).then(() => { this.innerText='Copied'; setTimeout(() => { this.innerText='Copy Code'; }, 2000); });">Copy Code</button><pre><code>mount -t nfs 127.0.0.1: nfs</code></pre></div>
-            <p>and then we see there is second flag and privatekey of james.</p>
+            <p>and then we see there is second flag and private key of james.</p>
         </div>
         <div class="photo-container">
-            <img src="pics/09.png" alt="Image 9">
+            <img src="pics/o9.png" alt="Image 9">
             <p>then we see private key has no password and we can login as user james</p>
         </div>
         <div class="photo-container">
